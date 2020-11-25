@@ -12,256 +12,17 @@ url:https://ieeexplore.ieee.org/abstract/document/8852097/
 '''
 
 from competitive_algorithms.prequential_super import PREQUENTIAL_SUPER
+from sklearn.metrics import accuracy_score
 from data_streams.adjust_labels import Adjust_labels
 from streams.readers.arff_reader import ARFFReader
-from gaussian_models.gmm_unsupervised import GMM
 from gaussian_models.gmm_unsupervised import Gaussian
-from sklearn.neighbors import NearestNeighbors
+from gaussian_models.gmm_unsupervised import GMM_KDN
 from detectors.ewma import EWMA
 al = Adjust_labels()
 import numpy as np
+import time
+np.random.seed(0)
 
-class GMM_KDN(GMM):
-    def __init__(self, noise_threshold=0.8, n_vizinhos=5, kmax=2, emit=10, stop_criterion=True):
-        '''
-        Constructor of GMM_VD model
-        :kdn_train: to activate the use of kdn on training
-        :criacao: to activate the creation of gaussians throught the stream
-        :tipo_atualizacao: type of update used
-        :noise_threshold: the value to define an noise
-        :kmax: max number of gaussian used per class
-        :n_vizinhos: number of neighboors used on kdn
-        '''
-        
-        self.noise_threshold = noise_threshold
-        self.n_vizinhos = 1+n_vizinhos
-        self.Kmax = kmax
-        self.emit = emit
-        self.stop_criterion = stop_criterion
-        
-    '''
-    KDN PRE-PROCESSING
-    '''
-        
-    def easyInstances(self, x, y, limiar, n_vizinhos):
-        '''
-        Method to return a subset of validation only with the easy instacias
-        :param: x: patterns
-        :param: y: labels
-        :return: x_new, y_new: 
-        '''
-        
-        # to guarantee
-        classes1, _ = np.unique(np.asarray(y), return_counts=True)
-        
-        # computing the difficulties for each instance
-        dificuldades = self.kDN(x, y)
-        
-        # to guarantee that will be there at least one observation
-        cont = 0
-        for i in dificuldades:
-            if(i < limiar):
-                cont += 1
-        if(cont <= n_vizinhos):
-            limiar = 1
-            
-        # variables to save the new instances
-        x_new = []
-        y_new = []
-         
-        # saving only the easy instances
-        for i in range(len(dificuldades)):
-            if(dificuldades[i] < limiar):
-                x_new.append(x[i])
-                y_new.append(y[i])
-                
-        # receiving the number of classes
-        classes, qtds_by_class = np.unique(np.asarray(y_new), return_counts=True)
-        
-        # returning only the easy instances
-        # condition of existence
-        if(len(qtds_by_class) != len(classes1) or True in (qtds_by_class < 5)):
-            return x, y, classes1
-        else:
-            return np.asarray(x_new), np.asarray(y_new), classes
-    
-    def kDN(self, X, Y):
-        '''
-        Method to compute the hardess of an observation based on a training set
-        :param: X: patterns
-        :param: Y: labels
-        :return: dificuldades: vector with hardness for each instance 
-        '''
-        
-        # to store the hardness
-        hardness = [0] * len(Y)
-
-        # for to compute the hardness for each instance
-        for i, (x, y) in enumerate(zip(X,Y)):
-            hardness[i] = self.kDNIndividual(x, y, X, Y)
-        
-        # returning the hardness
-        return hardness
-    
-    def kDNIndividual(self, x_query, y_query, x_sel, y_sel, plot=False):
-        '''
-        Metodo para computar o grau de dificuldade de uma observacao baseado em um conjunto de validacao
-        :param: x_query: padrao a ser consultado
-        :param: x: padroes dos dados
-        :param: y: respectivos rotulos
-        :return: dificuldade: flutuante com a probabilidade da instancia consultada 
-        '''
-    
-        # defining the neighboors
-        nbrs = NearestNeighbors(n_neighbors=self.n_vizinhos, algorithm='ball_tree').fit(x_sel)
-        
-        # consulting the next neighboors
-        _, indices = nbrs.kneighbors([x_query])
-        # removing the query instance
-        indices = indices[0][1:]
-        
-        # verifying the labels
-        cont = 0
-        for j in indices:
-            if(y_sel[j] != y_query):
-                cont += 1
-                    
-        # computing the hardness
-        hardness = cont/(self.n_vizinhos-1)
-        
-        #====================== to plot the neighboors ===================================
-        if(plot):
-            self.plotInstanceNeighboors(x_query, y_query, hardness, indices, x_sel)
-        #==================================================================================
-            
-        # returning the hardness
-        return hardness
-    
-    
-    '''
-    SUPERVISED LEARN
-    '''
-    
-    def fit(self, train_input, train_target, noise_threshold=False, n_vizinhos=False):
-        '''
-        method to fit the data to be clusterized
-        :param: train_input: matrix, the atributes must be in vertical, and the examples in the horizontal - must be a dataset that will be clusterized
-        :param: train_target: vector, with the labels for each pattern input
-        :param: Kmax: number max of gaussians to test. Default 4
-        :param: restarts: integer - number of restarts. Default 1
-        :param: iterations: integer - number of iterations to trains the gmm model. Default 30
-        '''
-        
-        # initialization
-        if(noise_threshold==False):
-            noise_threshold = self.noise_threshold
-        elif(n_vizinhos==False):
-            n_vizinhos = self.n_vizinhos
-        
-        # getting only the easy instances
-        self.train_input, self.train_target, unique = self.easyInstances(train_input, train_target, noise_threshold, n_vizinhos)
-        
-        # updating the variables to use for plot
-        self.L = len(unique)
-        self.unique = unique
-        
-        # instantiating the gaussians the will be used
-        self.gaussians = []
-         
-        # creating the optimal gaussians for each class
-        for y_true in unique:
-            
-            # dividing the patterns by class
-            x_train, _ = self.separatingDataByClass(y_true, self.train_input, self.train_target)
-
-            # training a gmm
-            self.trainGaussians(x_train, y_true, kmax=self.Kmax)
-        
-        # updating the gaussian weights          
-        self.updateWeight()
-                            
-    def separatingDataByClass(self, y_true, x_train, y_train):
-        '''
-        method to separate data by class
-        :y_true: label to be separeted
-        :x_train: patterns
-        :y_train: labels
-        :return: x_train, y_train corresponding y_true
-        '''
-        
-        # getting by class
-        X_new, Y_new = [], []
-        for x, y in zip(x_train, y_train):
-            if(y == y_true):
-                X_new.append(x)
-                Y_new.append(y)
-                
-        # returning the new examples
-        return np.asarray(X_new), np.asarray(Y_new)
-    
-    def trainGaussians(self, data, label, type_selection="AIC", kmax=2):
-        '''
-        method to train just one class
-        :label: respective class that will be trained
-        :data: data corresponding label
-        :type_selection: AIC or BIC criterion
-        '''
-        
-        # EM with AIC applied for each class
-        gmm = self.chooseBestModel(data, type_selection, kmax, 1, self.emit, self.stop_criterion)
-
-        # adding to the final GMM the just trained gaussians
-        self.addGMM(gmm, label)
-        
-        # returning the gmm
-        return gmm
-
-    def updateWeight(self):
-        '''
-        Method to update the mix
-        '''
-        
-        # computing the density
-        sum_dens = 0 
-        for g in self.gaussians:
-            sum_dens += g.dens
-        if(sum_dens == 0.0): sum_dens = 0.01
-        
-        # for each gaussian computing its weight
-        for i in range(len(self.gaussians)):
-            self.gaussians[i].mix = self.gaussians[i].dens/sum_dens
-
-
-    '''
-    SUPPORT METHODS
-    '''
-    
-    def addGMM(self, gmm, y_true):
-        '''
-        Method to add a new gmm in the final GMM
-        :y: respective label of GMM
-        :gmm: gmm trained
-        '''
-
-        # storing the gaussians            
-        for gaussian in gmm.gaussians:
-            gaussian.label = y_true 
-            self.gaussians.append(gaussian)
-            
-        # defining the number of gaussians for the problem
-        self.K = len(self.gaussians)
-    
-    def addGaussian(self, gaussian):
-        '''
-        Method to insert a new gaussian into GMM
-        '''
-        
-        #adding the new gaussian
-        self.gaussians.append(gaussian)
-        
-        # defining the number of gaussians for the problem
-        self.K = len(self.gaussians)
-        
 class GMM_VD(GMM_KDN):
     def __init__(self):
         super().__init__()
@@ -283,7 +44,7 @@ class GMM_VD(GMM_KDN):
         '''
         
         # training the GMM
-        self.fit(train_input, train_target, noise_threshold, n_vizinhos)
+        self.fit(train_input, train_target, self.noise_threshold, self.n_vizinhos)
          
     '''
     VIRTUAL ADAPTATION
@@ -303,10 +64,13 @@ class GMM_VD(GMM_KDN):
             if(flag):
                 # update the nearest gaussian
                 self.updateGaussian(x, gaussian)
-                        
+                
             else:
                 # create a gaussian
                 self.createGaussian(x, y_true)
+                
+            # removing obsolete gaussians
+            self.removeGaussians()
         
     '''
     ONLINE LEARNING
@@ -329,8 +93,10 @@ class GMM_VD(GMM_KDN):
         gaussian = np.argmax(z)
         
         # returning the probability and the nearest gaussian
-        #return z[gaussian], gaussian
-        return np.sum(z), gaussian
+        if(z[gaussian] > 0):
+            return True, gaussian
+        else:
+            return False, gaussian 
         
     def updateGaussian(self, x, gaussian):
         '''
@@ -360,9 +126,12 @@ class GMM_VD(GMM_KDN):
         :param: x: new observation
         '''
         
+        # getting the probabilities
+        probabilities = self.posteriorProbabilities(x)
+        
         # updating the loglikelihood
         for i in range(len(self.gaussians)):
-            self.gaussians[i].dens += self.posteriorProbability(x, i)
+            self.gaussians[i].dens += probabilities[i]
         
     def updateMean(self, x, gaussian):
         '''
@@ -435,7 +204,6 @@ class GMM_VD(GMM_KDN):
         # returning covariance
         return covariance
 
-
     '''
     CREATING GAUSSIANS ONLINE
     '''
@@ -451,7 +219,7 @@ class GMM_VD(GMM_KDN):
         mu = x
         
         # covariance
-        cov = (0.5**2) * np.identity(len(x))
+        cov = (0.05**2) * np.identity(len(x))
         
         # label
         label = y
@@ -471,6 +239,27 @@ class GMM_VD(GMM_KDN):
         # updating the weights of all gaussians
         self.updateWeight()
     
+    def removeGaussians(self):
+        '''
+        method to remove obsolete gaussians
+        '''
+        
+        # ammount of gaussians per class
+        class_gaussians = [self.gaussians[i].label for i in range(len(self.gaussians))]
+        labels, ammount = np.unique(class_gaussians, return_counts=True)
+            
+        # to search obsolete gaussians
+        erase = []
+        for i in range(len(labels)):
+            for j in range(len(self.gaussians)):
+                if(ammount[i] > 1 and self.gaussians[j].label == labels[i] and self.gaussians[j].mix < 0.01):
+                    erase.append(j)
+        
+        # to remove obsolete gaussians
+        for i in sorted(erase, reverse=True):
+            del self.gaussians[i]
+            self.K -= 1
+            
 class GMM_VRD(PREQUENTIAL_SUPER):
     def __init__(self, window_size=200):
         '''
@@ -573,9 +362,12 @@ class GMM_VRD(PREQUENTIAL_SUPER):
         # fitting the dataset
         self.CLASSIFIER.fit(x_train, y_train)
 
+        # printing the accuracy for training set
+        pred = self.CLASSIFIER.predict(x_train)
+        print(accuracy_score(y_train, pred))
+        
         # returning the new classifier        
         return self.CLASSIFIER
-    
     
     '''
     RUN ON DATA STREAM
@@ -586,16 +378,15 @@ class GMM_VRD(PREQUENTIAL_SUPER):
         method to run the stream
         '''
         
+        # starting time
+        self.start_time = time.time()
         
         ######################### 1. FITTING THE STREAM AND AUXILIAR VARIABLES ####################
-        # defining the stream
-        self.STREAM = al.adjustStream(labels, stream)
+        # storing the new stream
+        self.STREAM = stream
         
         # obtaining the initial window
         W = self.STREAM[:self.WINDOW_SIZE]
-        
-        # instantiating a window for warning levels 
-        W_warning = []
         
         # instantiating the validation window
         W_validation = W
@@ -610,9 +401,11 @@ class GMM_VRD(PREQUENTIAL_SUPER):
         
         # fitting the detector
         self.DETECTOR.fit(self.CLASSIFIER, W) 
+        
+        # instantiating a window for warning levels
+        W = [] 
+        W_warning = []
         ############################ 2. ##############################################################
-        
-        
         
         
         #################################### 3.SIMULATING THE STREAM ################################
@@ -626,7 +419,6 @@ class GMM_VRD(PREQUENTIAL_SUPER):
             
             # to execute the prequential precedure
             if(run):
-                
                 # split the current example on pattern and label
                 x, y = X[0:-1], int(X[-1])
         ##################################### 3. ######################################################
@@ -637,7 +429,7 @@ class GMM_VRD(PREQUENTIAL_SUPER):
                 ########################################## 4. ONLINE CLASSIFICATION ###################################
                 # using the classifier to predict the class of current label
                 yi = self.CLASSIFIER.predict(x)
-                    
+                
                 # storing the predictions
                 self.PREDICTIONS.append(yi)
                 self.TARGET.append(y)
@@ -662,9 +454,6 @@ class GMM_VRD(PREQUENTIAL_SUPER):
                 # verifying the claassifier
                 if(self.CLASSIFIER_READY):
     
-                    # sliding the current observation into W
-                    W = self.slidingWindow(W, X)
-                
                     # monitoring the datastream
                     warning_level, change_level = self.DETECTOR.detect(y, yi)
                 ################################## 7. ####################################################################
@@ -727,38 +516,38 @@ class GMM_VRD(PREQUENTIAL_SUPER):
                     self.CLASSIFIER_READY = True
                 ################################## 11. ###################################################################
                 
-                
-                
                     
                 # print the current process
                 self.printIterative(i)
+                
+        # ending time
+        self.end_time = time.time()
     
 def main():
     
     
     ####### 1. DEFINING THE DATASETS ##################################################################
-    i = 2
+    i = 4
     # REAL DATASETS 
-    #dataset = ['PAKDD', 'elec', 'noaa']
-    #labels, _, stream_records = ARFFReader.read("../data_streams/real/"+dataset[i]+".arff")
+    dataset = ['PAKDD', 'elec', 'noaa', 'poker-lsn2', 'covtypeNorm2']
+    labels, _, stream_records = ARFFReader.read("../data_streams/real/"+dataset[i]+".arff")
+    stream_records = al.adjustStream(labels, stream_records)
     
     # SYNTHETIC DATASETS 
-    dataset = ['circles', 'sine1', 'sine2', 'virtual_5changes', 'virtual_9changes', 'SEA', 'SEARec']
-    labels, _, stream_records = ARFFReader.read("../data_streams/_synthetic/"+dataset[i]+".arff")
+    #dataset = ['circles', 'sine1', 'sine2', 'virtual_5changes', 'virtual_9changes', 'SEA', 'SEARec']
+    #labels, _, stream_records = ARFFReader.read("../data_streams/_synthetic/"+dataset[i]+".arff")
     ####### 1. ########################################################################################
-    
     
     
     ####### 2. DEFINING THE MODEL PARAMETERS ##########################################################
     # instantiate the prequetial
-    preq = GMM_VRD(window_size=50)
+    preq = GMM_VRD(window_size=200)
     preq.run(labels, stream_records, cross_validation=True, qtd_folds=30, fold=1)
     
     # presenting the accuracy
     preq.plotAccuracy()
     print("Accuracy: ", preq.accuracyGeneral())
     ####### 2. DEFINING THE MODEL PARAMETERS ##########################################################
-    
     
     
     ####### 3. STORING THE PREDICTIONS ################################################################
