@@ -1,6 +1,6 @@
 # GMM-VRD
 
-In the module [Main](https://github.com/GustavoHFMO/GMM-VRD/blob/master/Main.py), we show how the approaches mentioned below can be executed.
+In this project the following algorithms were implemented:
 
 ## [GMM-VRD:](https://github.com/GustavoHFMO/GMM-VRD/blob/master/competitive_algorithms/gmm_vrd.py)
 > Oliveira, Gustavo HFM, Leandro L. Minku, and Adriano LI Oliveira. "GMM-VRD: A Gaussian Mixture Model for Dealing With Virtual and Real Concept Drifts." 2019 International Joint Conference on Neural Networks (IJCNN). IEEE, 2019.
@@ -10,3 +10,20 @@ In the module [Main](https://github.com/GustavoHFMO/GMM-VRD/blob/master/Main.py)
 
 ## [IGMM-CD:](https://github.com/GustavoHFMO/GMM-VRD/blob/master/competitive_algorithms/igmmcd.py)
 > L. S. Oliveira and G. E. Batista, “Igmm-cd: a gaussian mixture classification algorithm for data streams with concept drifts,” in BRACIS, 2015 Brazilian Conference on. IEEE, 2015, pp. 55–61
+
+##Requirements
+* Python 3 
+* Use pip to install any dependencies.
+
+## Usage
+'# Cloning the repository'
+'git clone https://github.com/GustavoHFMO/GMM-VRD.git'
+
+'# Acessing the repository'
+'cd GMM-VRD'
+
+'# Running the code'
+'python Main.py'
+
+
+## Result
