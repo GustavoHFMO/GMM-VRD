@@ -1,6 +1,6 @@
 # GMM-VRD
 
-In the module [Main](https://github.com/GustavoHFMO/GMM-VRD/blob/master/Main.py), we show how all approaches can be executed. The approaches are:
+In the module [Main](https://github.com/GustavoHFMO/GMM-VRD/blob/master/Main.py), we show how the approaches mentioned below can be executed.
 
 ## [GMM-VRD:](https://github.com/GustavoHFMO/GMM-VRD/blob/master/competitive_algorithms/gmm_vrd.py)
 > Oliveira, Gustavo HFM, Leandro L. Minku, and Adriano LI Oliveira. "GMM-VRD: A Gaussian Mixture Model for Dealing With Virtual and Real Concept Drifts." 2019 International Joint Conference on Neural Networks (IJCNN). IEEE, 2019.
