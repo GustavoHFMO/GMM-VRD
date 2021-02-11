@@ -11,19 +11,18 @@ In this project the following algorithms were implemented:
 ## [IGMM-CD:](https://github.com/GustavoHFMO/GMM-VRD/blob/master/competitive_algorithms/igmmcd.py)
 > L. S. Oliveira and G. E. Batista, “Igmm-cd: a gaussian mixture classification algorithm for data streams with concept drifts,” in BRACIS, 2015 Brazilian Conference on. IEEE, 2015, pp. 55–61
 
-##Requirements
+## Requirements
 * Python 3 
 * Use pip to install any dependencies.
 
 ## Usage
-'# Cloning the repository'
-'git clone https://github.com/GustavoHFMO/GMM-VRD.git'
+`# Cloning the repository`
+`git clone https://github.com/GustavoHFMO/GMM-VRD.git`
 
-'# Acessing the repository'
-'cd GMM-VRD'
+`# Acessing the repository`
+`cd GMM-VRD`
 
-'# Running the code'
-'python Main.py'
-
+`# Running the code`
+`python Main.py`
 
 ## Result
