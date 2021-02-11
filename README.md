@@ -1,6 +1,6 @@
 # GMM-VRD
 
-In this project the following algorithms were implemented:
+The module [Main.py](https://github.com/GustavoHFMO/GMM-VRD/blob/master/Main.py) executes the algorithms described below in real and synthetic datasets.
 
 ## [GMM-VRD:](https://github.com/GustavoHFMO/GMM-VRD/blob/master/competitive_algorithms/gmm_vrd.py)
 > Oliveira, Gustavo HFM, Leandro L. Minku, and Adriano LI Oliveira. "GMM-VRD: A Gaussian Mixture Model for Dealing With Virtual and Real Concept Drifts." 2019 International Joint Conference on Neural Networks (IJCNN). IEEE, 2019.
