@@ -88,7 +88,10 @@ class PREQUENTIAL_SUPER():
         timeSeries = self.calculateLongAccuracy(self.returnTarget(), self.returnPredictions(), 250)
         
         # plotting the accuracy
-        plt.plot(timeSeries)
+        plt.plot(timeSeries, label=self.NAME)
+        plt.xlabel("Number of batches")
+        plt.ylabel("Accuracy")
+        plt.legend()
         plt.show()
         
     def cross_validation(self, i, qtd_folds, fold):

@@ -8,7 +8,7 @@ E-mail: ghfmo@cin.ufpe.br
 
 ALGORITHMS USED IN THE PAPER PUBLISHED BELOW:
 
-OLIVEIRA, Gustavo HFM; MINKU, Leandro L.; OLIVEIRA, Adriano LI. 
+OLIVEIRA, Gustavo HFMO; MINKU, Leandro L.; OLIVEIRA, Adriano LI. 
 GMM-VRD: A Gaussian Mixture Model for Dealing With Virtual and Real Concept Drifts. 
 In: 2019 International Joint Conference on Neural Networks (IJCNN). 
 IEEE, 2019. p. 1-8.
@@ -33,6 +33,7 @@ i = 2
 # SYNTHETIC DATASETS 
 dataset = ['circles', 'sine1', 'sine2', 'virtual_5changes', 'virtual_9changes', 'SEA', 'SEARec']
 labels, _, stream_records = ARFFReader.read("data_streams/_synthetic/"+dataset[i]+".arff")
+#stream_records = stream_records[:350]
 ####### 1. ########################################################################################
     
     
