@@ -16,13 +16,13 @@ In this project the following algorithms were implemented:
 * Use pip to install any dependencies.
 
 ## Usage
-```# Cloning the repository```
-```git clone https://github.com/GustavoHFMO/GMM-VRD.git```
+```# Cloning the repository
+git clone https://github.com/GustavoHFMO/GMM-VRD.git
 
-```# Acessing the repository```
-```cd GMM-VRD```
+# Acessing the repository
+cd GMM-VRD
 
-```# Running the code```
-```python Main.py```
+# Running the code
+python Main.py```
 
 ## Result
