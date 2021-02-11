@@ -64,5 +64,5 @@ print("Accuracy: ", igmm_cd.accuracyGeneral())
 ####### 3. STORING THE PREDICTIONS ################################################################
 import pandas as pd
 df = pd.DataFrame(data={'predictions': gmm_vrd.PREDICTIONS, 'target':gmm_vrd.TARGET})
-df.to_csv("../projects/"+gmm_vrd.NAME+"-"+dataset[i]+".csv")
+df.to_csv("/images/"+gmm_vrd.NAME+"-"+dataset[i]+".csv")
 ####### 3. STORING THE PREDICTIONS ################################################################
