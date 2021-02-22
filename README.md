@@ -29,3 +29,6 @@ python Main.py
 
 ## Result
 ![](https://github.com/GustavoHFMO/GMM-VRD/blob/master/images/gmm_vrd_execution.png)
+
+## License
+This project is under a GNU General Public License (GPL) Version 3. See ![LICENSE](https://www.gnu.org/licenses/gpl-3.0-standalone.html) for more information.
