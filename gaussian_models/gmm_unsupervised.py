@@ -72,12 +72,13 @@ class PlotGMM():
                         size=16, ha='center', va='bottom', bbox=dict(boxstyle="round", fc="w", ec="0", alpha=1))
         
         # definindo o titulo e mostrando a imagem
-        plt.title('Time: ' +str(t))
+        #plt.title('Time: ' +str(t))
+        plt.title(str(t))
         plt.legend(loc='upper right')
         
         # ajustando o layout
         plt.gcf().set_size_inches(4.5, 4)
-        plt.subplots_adjust(bottom=0.08, top=0.99, left=0.08, right=0.99)
+        plt.subplots_adjust(bottom=0.08, top=0.92, left=0.08, right=0.99)
         plt.yticks(fontsize=14)
         plt.xticks(fontsize=14)
         
