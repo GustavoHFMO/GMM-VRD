@@ -1,6 +1,6 @@
 # GMM with training in batch
 
-The module [GMM_batch.py](https://github.com/GustavoHFMO/GMM-VRD/blob/master/GMM_batch.py) shows how to train a GMM in batch and also plots the generated model.
+The module [GMM_batch.py](https://github.com/GustavoHFMO/GMM-VRD/blob/master/GMM_batch.py) shows how to train a GMM for classification using a batch of observations, and also plots the generated model.
 
 ## Usage
 ```
