@@ -16,7 +16,6 @@ pip install -r requirements.txt
 
 The module [GMM_batch.py](https://github.com/GustavoHFMO/GMM-VRD/blob/master/GMM_batch.py) shows how to train a GMM for classification using a batch of observations, and also plots the generated model.
 
-## Usage
 ```
 # Running the code
 python GMM_batch.py
@@ -30,6 +29,11 @@ python GMM_batch.py
 
 The module [GMM_online.py](https://github.com/GustavoHFMO/GMM-VRD/blob/master/GMM_online.py) executes the algorithms described below in real and synthetic datasets.
 
+```
+# Running the code
+python GMM_online.py
+```
+
 ## [GMM-VRD:](https://github.com/GustavoHFMO/GMM-VRD/blob/master/competitive_algorithms/gmm_vrd.py)
 > Oliveira, Gustavo HFM, Leandro L. Minku, and Adriano LI Oliveira. "GMM-VRD: A Gaussian Mixture Model for Dealing With Virtual and Real Concept Drifts." 2019 International Joint Conference on Neural Networks (IJCNN). IEEE, 2019.
 
@@ -38,12 +42,6 @@ The module [GMM_online.py](https://github.com/GustavoHFMO/GMM-VRD/blob/master/GM
 
 ## [IGMM-CD:](https://github.com/GustavoHFMO/GMM-VRD/blob/master/competitive_algorithms/igmmcd.py)
 > L. S. Oliveira and G. E. Batista, “Igmm-cd: a gaussian mixture classification algorithm for data streams with concept drifts,” in BRACIS, 2015 Brazilian Conference on. IEEE, 2015, pp. 55–61
-
-## Usage
-```
-# Running the code
-python GMM_online.py
-```
 
 ## Result
 ![](https://github.com/GustavoHFMO/GMM-VRD/blob/master/images/gmm_vrd_execution.png)
