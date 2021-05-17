@@ -1,4 +1,4 @@
-# GMM-VRD
+# GMM-VRD: A Gaussian Mixture Model for Dealing With Virtual and Real Concept Drifts
 
 ## Usage
 ```
