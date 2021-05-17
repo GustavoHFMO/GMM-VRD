@@ -1,7 +1,3 @@
-# Requirements
-* Python 3 
-* Use pip to install any dependencies.
-
 # GMM with training in batch
 
 The module [GMM_batch.py](https://github.com/GustavoHFMO/GMM-VRD/blob/master/GMM_batch.py) shows how to train a GMM in batch and also plots the generated model.
@@ -13,6 +9,9 @@ git clone https://github.com/GustavoHFMO/GMM-VRD.git
 
 # Acessing the repository
 cd GMM-VRD
+
+# Installing the dependencies
+pip install -r requirements.txt
 
 # Running the code
 python GMM_batch.py
