@@ -1,0 +1,8 @@
+DESlib==0.2
+matplotlib==2.0.0
+numpy==1.15.4
+pandas==0.19.2
+pip==19.1.1
+scikit-learn==0.20.0
+scipy==0.19.0
+sklearn==0.0
