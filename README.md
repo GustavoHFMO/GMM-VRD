@@ -1,6 +1,4 @@
-# GMM with training in batch
-
-The module [GMM_batch.py](https://github.com/GustavoHFMO/GMM-VRD/blob/master/GMM_batch.py) shows how to train a GMM for classification using a batch of observations, and also plots the generated model.
+# GMM-VRD
 
 ## Usage
 ```
@@ -12,7 +10,14 @@ cd GMM-VRD
 
 # Installing the dependencies
 pip install -r requirements.txt
+```
 
+# GMM with training in batch
+
+The module [GMM_batch.py](https://github.com/GustavoHFMO/GMM-VRD/blob/master/GMM_batch.py) shows how to train a GMM for classification using a batch of observations, and also plots the generated model.
+
+## Usage
+```
 # Running the code
 python GMM_batch.py
 ```
@@ -36,15 +41,6 @@ The module [GMM_online.py](https://github.com/GustavoHFMO/GMM-VRD/blob/master/GM
 
 ## Usage
 ```
-# Cloning the repository
-git clone https://github.com/GustavoHFMO/GMM-VRD.git
-
-# Installing the dependencies
-pip install -r requirements.txt
-
-# Acessing the repository
-cd GMM-VRD
-
 # Running the code
 python GMM_online.py
 ```
