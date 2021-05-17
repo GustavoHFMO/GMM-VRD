@@ -39,6 +39,9 @@ The module [GMM_online.py](https://github.com/GustavoHFMO/GMM-VRD/blob/master/GM
 # Cloning the repository
 git clone https://github.com/GustavoHFMO/GMM-VRD.git
 
+# Installing the dependencies
+pip install -r requirements.txt
+
 # Acessing the repository
 cd GMM-VRD
 
