@@ -1,4 +1,4 @@
-# GMM-VRD: A Gaussian Mixture Model for Dealing With Virtual and Real Concept Drifts [![DOI](https://zenodo.org/badge/306144251.svg)](https://zenodo.org/badge/latestdoi/306144251)
+# GMM-VRD: A Gaussian Mixture Model for Dealing With Virtual and Real Concept Drifts - [![DOI](https://zenodo.org/badge/306144251.svg)](https://zenodo.org/badge/latestdoi/306144251)
 
 ## Usage
 ```
