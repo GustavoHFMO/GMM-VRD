@@ -2,6 +2,7 @@
 
 ## 📄 Paper
 [GMM-VRD (IJCNN)](https://github.com/GustavoHFMO/GMM-VRD/blob/master/7-%20GMM-VRD_A_Gaussian_Mixture_Model_for_Dealing_With_Virtual_and_Real_Concept_Drifts.pdf)
+> Oliveira, Gustavo HFM, Leandro L. Minku, and Adriano LI Oliveira. "GMM-VRD: A Gaussian Mixture Model for Dealing With Virtual and Real Concept Drifts." 2019 International Joint Conference on Neural Networks (IJCNN). IEEE, 2019.
 
 ## Problem
 Most approaches focus only on real drift and fail to properly handle virtual drift.
