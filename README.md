@@ -1,20 +1,20 @@
 # GMM-VRD: A Gaussian Mixture Model for Dealing With Virtual and Real Concept Drifts - [![DOI](https://zenodo.org/badge/306144251.svg)](https://zenodo.org/badge/latestdoi/306144251)
 
 ## 📄 Paper
-[Oliveira et al. (TKDE)](https://github.com/GustavoHFMO/OGMMF-VRD/blob/master/OliveiraTKDE2021.pdf)
+[GMM-VRD (IJCNN)](https://github.com/GustavoHFMO/GMM-VRD/blob/master/7-%20GMM-VRD_A_Gaussian_Mixture_Model_for_Dealing_With_Virtual_and_Real_Concept_Drifts.pdf)
 
 ## Problem
-Most methods handle only real drift and ignore differences between virtual and real drift, leading to suboptimal adaptation.
+Most approaches focus only on real drift and fail to properly handle virtual drift.
 
 ## Contribution
-- First in-depth analysis of virtual vs real drift impact on classifiers.
-- Proposed OGMMF-VRD to handle both drifts simultaneously.
-- Introduced noise filtering and model reuse to improve robustness and adaptation.
+- Proposed GMM-VRD to explicitly handle both virtual and real concept drift.
+- Used probabilistic inference to decide between updating and resetting models.
+- Designed distinct strategies for each drift type.
 
 ## Results
-- Outperformed state-of-the-art methods on synthetic and real datasets.
-- More stable performance and smaller degradation during drift periods.
-
+- Achieved best average accuracy compared to existing methods.
+- Reduced performance degradation during drift.
+  
 ## Usage
 ```
 # Cloning the repository
